@@ -1,0 +1,22 @@
+from netmiko import ConnectHandler
+
+device = {
+    'device_type': 'arista_eos',
+    'ip': '192.168.56.10',
+    'username': 'admin',
+    'password': 'admin'
+    #'port' : 22,
+    #'secret' : 'admin'
+    #'verbose' : True
+    }
+
+Ari_eos = ConnectHandler(**device)
+print('Entering the Enable mode..')
+Ari_eos.enable()
+
+commands = ['int loopback 0', 'ip address 1.1.1.1/32','exit']
+Ari_eos.send_config_set(commands)
+print(Ari_eos.find_prompt())
+Ari.send_command('write memory')
+print('Closing connection..')
+Ari_eos.disconnect()
