@@ -1,0 +1,30 @@
+from netmiko import ConnectHandler
+#import csv 
+
+device = {
+    'device_type': 'arista_eos',
+    'ip': '192.168.56.10',
+    'username': 'admin',
+    'password': 'admin'
+    #'port' : 22,        # Bydefault takes port 22
+    #'secret' : 'admin'  # Enable Password
+    #'verbose' : True
+    }
+
+Ari_eos = ConnectHandler(**device)
+print('Entering the Enable mode..')
+Ari_eos.enable()
+
+
+output = Ari_eos.send_command('sh arp | in Man')
+#print(output)
+prompt = Ari_eos.find_prompt()
+hostname = prompt[0:-1]
+#print(hostname)     # You want to see output on terminal
+filename = f'D://test//{hostname}.txt'    # in CSV format Don't forget to give the correct path
+with open(filename, 'w') as cmdout:
+    cmdout.write(output)
+    print(f'Command output of {hostname} completed sucessfully')
+    print('#'*30)
+print('Closing connection..')
+Ari_eos.disconnect()
